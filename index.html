@@ -2,110 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Year 2026 | Ry Studio</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- RESET & BASICS --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* Prevent scrolling */
-        }
-
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Fallback background color in case gradient fails */
-            background-color: #020024;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: white;
+            font-family: 'Poppins', sans-serif;
+            
+            /* FALLBACK BACKGROUND (If gradient fails) */
+            background-color: #020024; 
+            /* MAIN GRADIENT */
+            background-image: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
         }
 
-        /* --- CANVAS LAYER --- */
         #canvas-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* Lowest layer */
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
             pointer-events: none;
         }
 
-        /* --- GLASS CARD STYLING --- */
+        /* --- CARD DESIGN --- */
         .glass-card {
             position: relative;
-            z-index: 10; /* Above canvas */
-            
-            /* Glass Effect */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px) saturate(150%);
-            -webkit-backdrop-filter: blur(25px) saturate(150%); /* Safari Fix */
-            
-            /* Borders */
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            border-left: 1px solid rgba(255, 255, 255, 0.3);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            
-            border-radius: 40px;
-            padding: 3rem;
+            z-index: 10;
             width: 90%;
             max-width: 900px;
+            padding: 3rem;
             text-align: center;
+            border-radius: 40px;
             
-            /* Shadows */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-            transition: all 0.5s ease;
+            /* FALLBACK COLOR */
+            background-color: rgba(20, 20, 30, 0.6); 
+            
+            /* GLASS EFFECT */
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        /* --- TYPOGRAPHY --- */
         h1 {
-            font-weight: 300;
-            letter-spacing: 6px;
+            color: white;
             text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 2rem;
+            font-weight: 300;
             font-size: 1.5rem;
-            margin-bottom: 2.5rem;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        /* New Year Celebration State */
         h1.celebrate {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(180deg, #ffffff 0%, #2af598 50%, #009efd 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 40px rgba(42, 245, 152, 0.4);
-            animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            color: #2af598; /* Fallback */
+            text-shadow: 0 0 20px rgba(42, 245, 152, 0.5);
+            animation: popIn 0.5s ease forwards;
         }
 
-        /* --- COUNTDOWN GRID --- */
+        /* --- NUMBERS --- */
         .countdown {
             display: flex;
             justify-content: center;
-            gap: 2.5rem;
-            margin-bottom: 2rem;
+            gap: 2rem;
             flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
 
         .time-box {
@@ -117,49 +89,48 @@
         .number {
             font-size: 5rem;
             font-weight: 900;
-            /* Fix jittering numbers */
-            font-feature-settings: "tnum"; 
-            font-variant-numeric: tabular-nums;
+            line-height: 1;
             
-            /* Liquid Text Gradient */
-            background: linear-gradient(180deg, #ffffff 20%, #2af598 100%);
+            /* FALLBACK COLOR (If gradient text fails) */
+            color: #2af598; 
+            
+            /* GRADIENT TEXT TECHNIQUE */
+            background: linear-gradient(180deg, #ffffff 10%, #2af598 100%);
             -webkit-background-clip: text;
             background-clip: text;
-            color: transparent;
+            -webkit-text-fill-color: transparent; 
             
-            /* Liquid Shadow */
-            filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.3));
-            line-height: 1;
+            /* Shadow for depth */
+            filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.5));
+            
+            /* Tabular nums to stop jitter */
+            font-variant-numeric: tabular-nums;
         }
 
         .label {
+            color: rgba(255, 255, 255, 0.6);
             margin-top: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
             letter-spacing: 2px;
-            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
-        /* --- TEASER TEXT --- */
         .teaser-text {
             color: #2af598;
-            font-size: 1rem;
             margin-bottom: 2rem;
-            opacity: 0.8;
             font-weight: 300;
-            letter-spacing: 1px;
-            animation: pulse 3s infinite;
+            opacity: 0.8;
+            animation: pulse 2s infinite;
         }
 
         .divider {
-            width: 80%;
             height: 1px;
-            background: rgba(255,255,255,0.15);
+            width: 80%;
+            background: rgba(255,255,255,0.2);
             margin: 0 auto 2rem auto;
         }
 
-        /* --- SOCIAL LINKS --- */
+        /* --- CONTACTS --- */
         .contact-section {
             display: flex;
             justify-content: center;
@@ -170,87 +141,39 @@
         .contact-link {
             text-decoration: none;
             color: white;
-            padding: 12px 25px;
-            border-radius: 50px;
+            padding: 12px 24px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            transition: 0.3s;
             cursor: pointer;
-            position: relative; /* For tooltip positioning */
         }
 
         .contact-link:hover {
             background: rgba(255,255,255,0.15);
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        /* Icon Colors */
         .fa-instagram { color: #E1306C; }
         .fa-discord { color: #5865F2; }
         .fa-envelope { color: #ffffff; }
 
-        /* --- TOOLTIP --- */
-        .tooltip::after {
-            content: "Copied!";
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2af598;
-            color: #000;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .tooltip.show-tooltip::after {
-            opacity: 1;
-        }
+        /* Helpers */
+        .vanish { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        .hidden { display: none; }
+        @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- ANIMATIONS --- */
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; text-shadow: 0 0 15px rgba(42, 245, 152, 0.4); }
-        }
-
-        @keyframes zoomIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .vanish {
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            pointer-events: none;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* --- RESPONSIVE FIXES --- */
-        @media (max-width: 768px) {
-            .glass-card { padding: 2rem 1rem; width: 95%; }
-            .number { font-size: 3.5rem; }
-            .countdown { gap: 1rem; }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 1.1rem; }
-            .countdown { gap: 1rem; display: grid; grid-template-columns: 1fr 1fr; }
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
             .number { font-size: 3rem; }
-            .contact-section { flex-direction: column; width: 100%; }
+            .countdown { gap: 1rem; }
+            .glass-card { padding: 2rem 1rem; }
+            h1.celebrate { font-size: 2rem; }
             .contact-link { width: 100%; justify-content: center; }
-            h1.celebrate { font-size: 2.2rem; margin-bottom: 2rem; }
         }
     </style>
 </head>
@@ -259,251 +182,114 @@
     <canvas id="canvas-container"></canvas>
 
     <div class="glass-card">
-        <h1 id="main-title">New Year Countdown</h1>
+        <h1 id="title">New Year Countdown</h1>
         
-        <div id="countdown-wrapper">
+        <div id="counter-container">
             <div class="countdown">
-                <div class="time-box">
-                    <span class="number" id="days">00</span>
-                    <span class="label">Days</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="hours">00</span>
-                    <span class="label">Hours</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="minutes">00</span>
-                    <span class="label">Mins</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="seconds">00</span>
-                    <span class="label">Secs</span>
-                </div>
+                <div class="time-box"><span class="number" id="days">00</span><span class="label">Days</span></div>
+                <div class="time-box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
+                <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
+                <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
             </div>
-
-            <div class="teaser-text">
-                Return at midnight for a surprise...
-            </div>
+            <div class="teaser-text">Return at midnight for a surprise...</div>
         </div>
 
         <div class="divider"></div>
 
         <div class="contact-section">
-            <a href="https://instagram.com/ryg_n.x" target="_blank" class="contact-link">
-                <i class="fab fa-instagram"></i>
-                <span>ryg_n.x</span>
-            </a>
-            
-            <div class="contact-link tooltip" id="discord-btn" onclick="copyDiscord()">
-                <i class="fab fa-discord"></i>
-                <span>.rixx_.</span>
-            </div>
-
-            <a href="mailto:ry.studio.co@gmail.com" class="contact-link">
-                <i class="fas fa-envelope"></i>
-                <span>Email Me</span>
-            </a>
+            <a href="https://instagram.com/ryg_n.x" target="_blank" class="contact-link"><i class="fab fa-instagram"></i>ryg_n.x</a>
+            <div class="contact-link" onclick="copyDiscord()"><i class="fab fa-discord"></i>.rixx_.</div>
+            <a href="mailto:ry.studio.co@gmail.com" class="contact-link"><i class="fas fa-envelope"></i>Email Me</a>
         </div>
     </div>
 
     <script>
-        /* --- CONFIGURATION --- */
-        // ISO 8601 Format for IST (Indian Standard Time)
-        const TARGET_DATE_ISO = "2026-01-01T00:00:00+05:30"; 
-        let fireworksActive = false;
-        let isNewYear = false;
+        const TARGET = "2026-01-01T00:00:00+05:30"; // IST
+        let fireworksOn = false;
 
-        /* --- COUNTDOWN ENGINE --- */
-        function updateCountdown() {
-            if (isNewYear) return;
-
-            const target = new Date(TARGET_DATE_ISO).getTime();
-            const now = new Date().getTime();
-            const gap = target - now;
-
-            // Trigger New Year if gap is 0 or less
+        function update() {
+            const gap = new Date(TARGET).getTime() - new Date().getTime();
+            
             if (gap <= 0) {
-                activateNewYear();
+                document.getElementById('counter-container').classList.add('vanish');
+                setTimeout(() => {
+                    document.getElementById('counter-container').classList.add('hidden');
+                    const t = document.getElementById('title');
+                    t.innerText = "HAPPY NEW YEAR!";
+                    t.classList.add('celebrate');
+                }, 500);
+                if (!fireworksOn) { fireworksOn = true; stars.forEach(s => s.speed *= 5); }
                 return;
             }
 
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
+            const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+            const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((gap % (1000 * 60)) / 1000);
 
-            const d = Math.floor(gap / day);
-            const h = Math.floor((gap % day) / hour);
-            const m = Math.floor((gap % hour) / minute);
-            const s = Math.floor((gap % minute) / second);
-
-            document.getElementById('days').innerText = d.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+            document.getElementById('days').innerText = d.toString().padStart(2,'0');
+            document.getElementById('hours').innerText = h.toString().padStart(2,'0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2,'0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2,'0');
         }
 
-        /* --- STATE MANAGER --- */
-        function activateNewYear() {
-            isNewYear = true;
-
-            // 1. Fade out countdown
-            const wrapper = document.getElementById('countdown-wrapper');
-            wrapper.classList.add('vanish');
-
-            // 2. Remove after transition and Change Title
-            setTimeout(() => {
-                wrapper.classList.add('hidden');
-                
-                const title = document.getElementById('main-title');
-                title.innerText = "HAPPY NEW YEAR!";
-                title.classList.add('celebrate');
-            }, 500);
-
-            // 3. Start Fireworks
-            if (!fireworksActive) {
-                fireworksActive = true;
-                // Accelerate stars
-                stars.forEach(s => s.speed *= 5);
-            }
-        }
-
-        /* --- DISCORD UTILITY --- */
         function copyDiscord() {
-            const discordID = ".rixx_.";
-            navigator.clipboard.writeText(discordID).then(() => {
-                const btn = document.getElementById('discord-btn');
-                btn.classList.add('show-tooltip');
-                setTimeout(() => btn.classList.remove('show-tooltip'), 2000);
-            }).catch(err => console.error("Clipboard failed", err));
+            navigator.clipboard.writeText(".rixx_.");
+            alert("Discord username copied!");
         }
 
-        /* --- CANVAS VISUALS (Stars & Fireworks) --- */
+        // VISUALS
         const canvas = document.getElementById('canvas-container');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let stars = [];
-        let particles = [];
+        let width, height, stars = [], particles = [];
 
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            initStars();
-        }
-
-        class Star {
-            constructor() {
-                this.reset(true);
-            }
-            reset(initial = false) {
-                this.x = Math.random() * width;
-                this.y = initial ? Math.random() * height : 0;
-                this.size = Math.random() * 2 + 0.5;
-                this.speed = Math.random() * 0.5 + 0.2;
-                this.opacity = Math.random();
-            }
-            update() {
-                this.y += this.speed;
-                if (this.y > height) this.reset();
-                
-                // Twinkle
-                this.opacity += (Math.random() - 0.5) * 0.05;
-                if (this.opacity < 0.1) this.opacity = 0.1;
-                if (this.opacity > 1) this.opacity = 1;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
+        function resize() { width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initStars(); }
+        
         function initStars() {
             stars = [];
-            // Create 150 stars
-            for (let i = 0; i < 150; i++) {
-                stars.push(new Star());
-            }
+            for(let i=0; i<150; i++) stars.push({
+                x: Math.random()*width, y: Math.random()*height,
+                size: Math.random()*2, speed: Math.random()*0.5+0.1, alpha: Math.random()
+            });
         }
 
-        class FireworkParticle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 5 + 2;
-                this.dx = Math.cos(angle) * velocity;
-                this.dy = Math.sin(angle) * velocity;
-                this.alpha = 1;
-                this.friction = 0.95;
-                this.gravity = 0.05;
-            }
-            update() {
-                this.dx *= this.friction;
-                this.dy *= this.friction;
-                this.dy += this.gravity;
-                this.x += this.dx;
-                this.y += this.dy;
-                this.alpha -= 0.015;
-            }
-            draw() {
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-
-        function launchFirework() {
-            // Random chance to launch
-            if (Math.random() > 0.05) return;
+        function animate() {
+            ctx.clearRect(0,0,width,height);
             
-            const x = Math.random() * width;
-            const y = Math.random() * height * 0.5;
-            const colors = ['#2af598', '#009efd', '#ff0055', '#ffe53b', '#ffffff'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            
-            for (let i = 0; i < 40; i++) {
-                particles.push(new FireworkParticle(x, y, color));
-            }
-        }
-
-        function animateLoop() {
-            ctx.clearRect(0, 0, width, height);
-
-            // Draw Stars
-            stars.forEach(star => {
-                star.update();
-                star.draw();
+            // Stars
+            stars.forEach(s => {
+                s.y += s.speed;
+                if(s.y > height) { s.y=0; s.x=Math.random()*width; }
+                ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
             });
 
-            // Draw Fireworks
-            if (fireworksActive) {
-                launchFirework();
-                particles.forEach((p, index) => {
-                    p.update();
-                    p.draw();
-                    if (p.alpha <= 0) particles.splice(index, 1);
+            // Fireworks
+            if(fireworksOn && Math.random() < 0.05) {
+                const colors = ['#2af598','#009efd','#ff0055','#fff'];
+                const c = colors[Math.floor(Math.random()*colors.length)];
+                const x = Math.random()*width, y = Math.random()*height*0.5;
+                for(let i=0;i<30;i++) particles.push({
+                    x:x, y:y, dx:Math.cos(Math.random()*Math.PI*2)*5, dy:Math.sin(Math.random()*Math.PI*2)*5,
+                    alpha:1, color:c
                 });
             }
 
-            requestAnimationFrame(animateLoop);
+            particles.forEach((p,i) => {
+                p.x+=p.dx*0.95; p.y+=p.dy*0.95+0.05; p.alpha-=0.02;
+                ctx.globalAlpha=p.alpha; ctx.fillStyle=p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                if(p.alpha<=0) particles.splice(i,1);
+            });
+            ctx.globalAlpha=1;
+            requestAnimationFrame(animate);
         }
 
-        // --- INITIALIZATION ---
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        animateLoop();
-        
-        // Start Interval
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Run once immediately
+        window.onresize = resize;
+        resize();
+        animate();
+        setInterval(update, 1000);
+        update();
     </script>
 </body>
 </html>
