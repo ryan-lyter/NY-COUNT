@@ -2,294 +2,495 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>New Year 2026 | Ry Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- GLOBAL RESET --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
         body {
+            background-color: #020024;
+            background-image: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
             height: 100vh;
             width: 100vw;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', sans-serif;
-            
-            /* FALLBACK BACKGROUND (If gradient fails) */
-            background-color: #020024; 
-            /* MAIN GRADIENT */
-            background-image: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
         }
 
-        #canvas-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
-            pointer-events: none;
+        /* --- LAYOUT --- */
+        #app-container {
+            width: 100%; height: 100%; overflow-y: scroll; scroll-behavior: smooth; scroll-snap-type: y mandatory;
         }
 
-        /* --- CARD DESIGN --- */
+        .screen {
+            width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; scroll-snap-align: start;
+        }
+
+        #canvas-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+        }
+
+        /* --- CARDS & TYPOGRAPHY --- */
         .glass-card {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 900px;
-            padding: 3rem;
-            text-align: center;
-            border-radius: 40px;
-            
-            /* FALLBACK COLOR */
-            background-color: rgba(20, 20, 30, 0.6); 
-            
-            /* GLASS EFFECT */
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative; z-index: 10; width: 90%; max-width: 800px; padding: 3rem; text-align: center; border-radius: 40px;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
 
         h1 {
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 2rem;
-            font-weight: 300;
-            font-size: 1.5rem;
+            text-transform: uppercase; letter-spacing: 5px; margin-bottom: 2rem; font-weight: 300; font-size: 1.5rem; text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         h1.celebrate {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #2af598; /* Fallback */
-            text-shadow: 0 0 20px rgba(42, 245, 152, 0.5);
-            animation: popIn 0.5s ease forwards;
+            font-size: 3rem; font-weight: 900; color: #2af598; text-shadow: 0 0 30px rgba(42, 245, 152, 0.6); animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* --- NUMBERS --- */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        .countdown { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .time-box { display: flex; flex-direction: column; align-items: center; }
         .number {
-            font-size: 5rem;
-            font-weight: 900;
-            line-height: 1;
-            
-            /* FALLBACK COLOR (If gradient text fails) */
-            color: #2af598; 
-            
-            /* GRADIENT TEXT TECHNIQUE */
-            background: linear-gradient(180deg, #ffffff 10%, #2af598 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; 
-            
-            /* Shadow for depth */
-            filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.5));
-            
-            /* Tabular nums to stop jitter */
-            font-variant-numeric: tabular-nums;
+            font-size: 5rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums;
+            background: linear-gradient(180deg, #ffffff 20%, #2af598 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0px 5px 5px rgba(0, 0, 0, 0.5));
         }
+        .label { color: rgba(255, 255, 255, 0.6); margin-top: 10px; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
 
-        .label {
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        .teaser-text {
-            color: #2af598;
-            margin-bottom: 2rem;
-            font-weight: 300;
-            opacity: 0.8;
-            animation: pulse 2s infinite;
-        }
-
-        .divider {
-            height: 1px;
-            width: 80%;
-            background: rgba(255,255,255,0.2);
-            margin: 0 auto 2rem auto;
-        }
-
-        /* --- CONTACTS --- */
-        .contact-section {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
+        .contact-section { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
         .contact-link {
-            text-decoration: none;
-            color: white;
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            cursor: pointer;
+            text-decoration: none; color: white; padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; align-items: center; gap: 8px; transition: 0.3s; cursor: pointer;
+        }
+        .contact-link:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-3px); }
+        .fa-instagram { color: #E1306C; } .fa-discord { color: #5865F2; }
+
+        .scroll-indicator {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; cursor: pointer; opacity: 0.7; animation: bounce 2s infinite; z-index: 20;
         }
 
-        .contact-link:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-3px);
+        /* --- GAME & MODAL --- */
+        #game-ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; z-index: 20; }
+        #score-display { font-size: 4rem; font-weight: 900; color: rgba(255, 255, 255, 0.1); transition: color 0.3s; }
+        #game-canvas { display: block; width: 100%; height: 100%; cursor: none; }
+
+        #game-modal {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.95); padding: 2rem; border-radius: 20px; text-align: center; border: 2px solid #2af598; display: none; z-index: 30; backdrop-filter: blur(20px); box-shadow: 0 0 60px rgba(42, 245, 152, 0.2); width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto;
         }
 
-        .fa-instagram { color: #E1306C; }
-        .fa-discord { color: #5865F2; }
-        .fa-envelope { color: #ffffff; }
+        .modal-title { color: #2af598; font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 2px; font-weight: 600; }
+        .input-group { margin-bottom: 1rem; text-align: left; }
+        .input-label { display: block; font-size: 0.75rem; color: #aaa; margin-bottom: 5px; margin-left: 10px; font-weight: 600; }
+        
+        .neon-input {
+            width: 100%; padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; color: white; font-family: 'Poppins', sans-serif; outline: none; transition: 0.3s;
+        }
+        .neon-input:focus { border-color: #2af598; box-shadow: 0 0 15px rgba(42, 245, 152, 0.3); }
 
-        /* Helpers */
-        .vanish { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        .hidden { display: none; }
-        @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .warning-text {
+            font-size: 0.7rem; color: #ffcc00; margin-bottom: 1.5rem; line-height: 1.4; background: rgba(255, 204, 0, 0.1); padding: 8px; border-radius: 10px; border: 1px solid rgba(255, 204, 0, 0.2);
+        }
 
-        /* RESPONSIVE */
+        .slider-container { margin-bottom: 1.5rem; text-align: center; }
+        .slider-val { font-size: 1.5rem; font-weight: 900; color: #2af598; margin-bottom: 5px; display: block; }
+        
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #2af598; cursor: pointer; margin-top: -8px; box-shadow: 0 0 10px #2af598; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+
+        .btn-primary {
+            width: 100%; padding: 12px; border-radius: 50px; border: none; background: linear-gradient(90deg, #2af598, #009efd); color: #000; font-weight: 900; font-size: 1rem; cursor: pointer; transition: transform .2s; box-shadow: 0 5px 20px rgba(42, 245, 152, 0.3);
+        }
+        .btn-primary:hover { transform: scale(1.05); }
+        .status-text { font-size: 0.8rem; color: #888; margin-top: 15px; min-height: 20px; }
+
         @media (max-width: 600px) {
-            .number { font-size: 3rem; }
-            .countdown { gap: 1rem; }
-            .glass-card { padding: 2rem 1rem; }
-            h1.celebrate { font-size: 2rem; }
-            .contact-link { width: 100%; justify-content: center; }
+            .number { font-size: 2.5rem; } .glass-card { padding: 1.5rem 1rem; width: 95%; } h1 { font-size: 1.2rem; } #game-modal { padding: 1.5rem; }
         }
+
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas-container"></canvas>
+    <canvas id="canvas-bg"></canvas>
 
-    <div class="glass-card">
-        <h1 id="title">New Year Countdown</h1>
-        
-        <div id="counter-container">
-            <div class="countdown">
-                <div class="time-box"><span class="number" id="days">00</span><span class="label">Days</span></div>
-                <div class="time-box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
-                <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
-                <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+    <div id="app-container">
+        <div class="screen" id="screen-home">
+            <div class="glass-card">
+                <h1 id="title">New Year Countdown</h1>
+                <div id="counter-container">
+                    <div class="countdown">
+                        <div class="time-box"><span class="number" id="days">00</span><span class="label">Days</span></div>
+                        <div class="time-box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
+                        <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
+                        <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+                    </div>
+                    <div style="color:#2af598;margin:1rem 0;font-size:0.9rem;opacity:0.8;animation:pulse 2s infinite">
+                        Return at midnight for a surprise...
+                    </div>
+                </div>
+                <div style="height:1px;width:80%;background:rgba(255,255,255,0.1);margin:1.5rem auto"></div>
+                <div class="contact-section">
+                    <a href="https://instagram.com/ryg_n.x" target="_blank" class="contact-link"><i class="fab fa-instagram"></i>ryg_n.x</a>
+                    <div class="contact-link" onclick="copyDiscord()"><i class="fab fa-discord"></i>.rixx_.</div>
+                </div>
             </div>
-            <div class="teaser-text">Return at midnight for a surprise...</div>
+            <div class="scroll-indicator">
+                <span style="font-size:0.8rem;letter-spacing:2px;margin-bottom:5px">SCROLL TO ENTER VOID</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="screen" id="screen-game">
+            <div id="game-ui">
+                <div style="font-size:1rem;opacity:0.7;margin-bottom:5px;letter-spacing:2px">NEON VOID</div>
+                <div id="score-display">0</div>
+            </div>
 
-        <div class="contact-section">
-            <a href="https://instagram.com/ryg_n.x" target="_blank" class="contact-link"><i class="fab fa-instagram"></i>ryg_n.x</a>
-            <div class="contact-link" onclick="copyDiscord()"><i class="fab fa-discord"></i>.rixx_.</div>
-            <a href="mailto:ry.studio.co@gmail.com" class="contact-link"><i class="fas fa-envelope"></i>Email Me</a>
+            <canvas id="game-canvas"></canvas>
+
+            <div id="game-modal">
+                <div id="reg-form">
+                    <h2 class="modal-title">IDENTIFICATION</h2>
+                    <div class="input-group">
+                        <label class="input-label">CODENAME</label>
+                        <input type="text" id="inp-name" class="neon-input" placeholder="Enter Name">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">DISCORD / IG TAG</label>
+                        <input type="text" id="inp-contact" class="neon-input" placeholder="@username">
+                    </div>
+                    <div class="warning-text">
+                        <i class="fas fa-exclamation-triangle"></i> NOTE: Please provide your real Contact ID. We cannot select you as a winner if we cannot reach you.
+                    </div>
+                    <div class="slider-container">
+                        <label class="input-label" style="text-align:center;margin-bottom:10px">RATE THIS SITE</label>
+                        <span id="slider-val-display" class="slider-val">10</span>
+                        <input type="range" id="inp-rating" min="1" max="10" value="10" oninput="updateSlider(this.value)">
+                    </div>
+                    <button class="btn-primary" onclick="registerUser()">INITIALIZE SYSTEM</button>
+                </div>
+
+                <div id="game-over-view" style="display:none">
+                    <h2 class="modal-title" style="color:#ff0055">CONNECTION LOST</h2>
+                    <p style="font-size:1rem;color:#ccc;margin-bottom:5px">FINAL SCORE</p>
+                    <p style="font-size:3rem;font-weight:900;color:white;margin-bottom:20px" id="final-score">0</p>
+                    <button class="btn-primary" onclick="restartGame()">RE-ESTABLISH LINK</button>
+                    <div class="status-text" id="upload-status">UPLOADING DATA...</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const TARGET = "2026-01-01T00:00:00+05:30"; // IST
-        let fireworksOn = false;
+        // --- SECURE WEBHOOK (REVERSED STRING METHOD) ---
+        // Prevents basic scraping.
+        const _revUrl = "7F2lp8uT1cr8kQtfa_4bEJ8-x-7oGa_4B6LNwXE7cRiTtSTHoWXiZv2tIkJeFm3A-vrS1/1736191032915345541/skoohbew/ipa/moc.drocsid//:sptth";
+        
+        function getWebhookUrl() {
+            return _revUrl.split("").reverse().join("");
+        }
 
-        function update() {
+        // --- COUNTDOWN SYSTEM ---
+        const TARGET = "2026-01-01T00:00:00+05:30";
+        let isNewYear = false;
+
+        function updateCountdown() {
             const gap = new Date(TARGET).getTime() - new Date().getTime();
-            
-            if (gap <= 0) {
-                document.getElementById('counter-container').classList.add('vanish');
-                setTimeout(() => {
-                    document.getElementById('counter-container').classList.add('hidden');
-                    const t = document.getElementById('title');
-                    t.innerText = "HAPPY NEW YEAR!";
-                    t.classList.add('celebrate');
-                }, 500);
-                if (!fireworksOn) { fireworksOn = true; stars.forEach(s => s.speed *= 5); }
+            if (gap <= 0 && !isNewYear) {
+                isNewYear = true;
+                document.getElementById('counter-container').style.display = 'none';
+                const t = document.getElementById('title');
+                t.innerText = "HAPPY NEW YEAR!";
+                t.classList.add('celebrate');
+                bgStars.forEach(s => s.speed *= 5);
                 return;
             }
+            if (isNewYear) return;
 
             const d = Math.floor(gap / (1000 * 60 * 60 * 24));
             const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((gap % (1000 * 60)) / 1000);
 
-            document.getElementById('days').innerText = d.toString().padStart(2,'0');
-            document.getElementById('hours').innerText = h.toString().padStart(2,'0');
-            document.getElementById('minutes').innerText = m.toString().padStart(2,'0');
-            document.getElementById('seconds').innerText = s.toString().padStart(2,'0');
+            document.getElementById('days').innerText = d.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
         }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
 
         function copyDiscord() {
             navigator.clipboard.writeText(".rixx_.");
-            alert("Discord username copied!");
+            alert("Discord ID copied!");
         }
 
-        // VISUALS
-        const canvas = document.getElementById('canvas-container');
-        const ctx = canvas.getContext('2d');
-        let width, height, stars = [], particles = [];
-
-        function resize() { width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initStars(); }
-        
-        function initStars() {
-            stars = [];
-            for(let i=0; i<150; i++) stars.push({
-                x: Math.random()*width, y: Math.random()*height,
-                size: Math.random()*2, speed: Math.random()*0.5+0.1, alpha: Math.random()
-            });
+        function updateSlider(v) {
+            document.getElementById('slider-val-display').innerText = v;
         }
 
-        function animate() {
-            ctx.clearRect(0,0,width,height);
-            
-            // Stars
-            stars.forEach(s => {
-                s.y += s.speed;
-                if(s.y > height) { s.y=0; s.x=Math.random()*width; }
-                ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
-                ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
-            });
+        // --- BACKGROUND FX ---
+        const bgCanvas = document.getElementById('canvas-bg');
+        const bgCtx = bgCanvas.getContext('2d');
+        let bgWidth, bgHeight, bgStars = [];
 
-            // Fireworks
-            if(fireworksOn && Math.random() < 0.05) {
-                const colors = ['#2af598','#009efd','#ff0055','#fff'];
-                const c = colors[Math.floor(Math.random()*colors.length)];
-                const x = Math.random()*width, y = Math.random()*height*0.5;
-                for(let i=0;i<30;i++) particles.push({
-                    x:x, y:y, dx:Math.cos(Math.random()*Math.PI*2)*5, dy:Math.sin(Math.random()*Math.PI*2)*5,
-                    alpha:1, color:c
+        function initBg() {
+            bgWidth = bgCanvas.width = window.innerWidth;
+            bgHeight = bgCanvas.height = window.innerHeight;
+            bgStars = [];
+            for (let i = 0; i < 150; i++) {
+                bgStars.push({
+                    x: Math.random() * bgWidth, y: Math.random() * bgHeight,
+                    size: Math.random() * 2, speed: Math.random() * 0.5 + 0.1, alpha: Math.random()
                 });
             }
-
-            particles.forEach((p,i) => {
-                p.x+=p.dx*0.95; p.y+=p.dy*0.95+0.05; p.alpha-=0.02;
-                ctx.globalAlpha=p.alpha; ctx.fillStyle=p.color;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
-                if(p.alpha<=0) particles.splice(i,1);
-            });
-            ctx.globalAlpha=1;
-            requestAnimationFrame(animate);
         }
 
-        window.onresize = resize;
-        resize();
-        animate();
-        setInterval(update, 1000);
-        update();
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+            bgStars.forEach(s => {
+                s.y += s.speed;
+                if (s.y > bgHeight) { s.y = 0; s.x = Math.random() * bgWidth; }
+                bgCtx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+                bgCtx.beginPath(); bgCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2); bgCtx.fill();
+            });
+            requestAnimationFrame(animateBg);
+        }
+        initBg();
+        animateBg();
+
+        // --- GAME LOGIC ---
+        const gameCanvas = document.getElementById('game-canvas');
+        const gCtx = gameCanvas.getContext('2d');
+        const appContainer = document.getElementById('app-container');
+        const modal = document.getElementById('game-modal');
+
+        let gW, gH;
+        let player = { x: 0, y: 0, size: 8, angle: 0, trail: [] };
+        let enemies = [];
+        let particles = [];
+        let score = 0;
+        let frame = 0;
+        let gameOver = false;
+        let gameRunning = false;
+        let difficulty = 2.5;
+        let user = { name: '', contact: '', rating: '10', registered: false };
+
+        function resizeGame() {
+            gW = gameCanvas.width = window.innerWidth;
+            gH = gameCanvas.height = window.innerHeight;
+            player.x = gW / 2;
+            player.y = gH - 100;
+        }
+
+        appContainer.addEventListener('scroll', () => {
+            const scrollPos = appContainer.scrollTop;
+            const triggerPoint = window.innerHeight * 0.5;
+            if (scrollPos > triggerPoint && !gameRunning && !gameOver) {
+                if (!user.registered) {
+                    modal.style.display = 'block';
+                } else {
+                    gameRunning = true;
+                    resizeGame();
+                    startGameLoop();
+                }
+            } else if (scrollPos < triggerPoint) {
+                gameRunning = false;
+                if (!user.registered) modal.style.display = 'none';
+            }
+        });
+
+        function registerUser() {
+            const n = document.getElementById('inp-name').value.trim();
+            const c = document.getElementById('inp-contact').value.trim();
+            const r = document.getElementById('inp-rating').value;
+            if (n.length < 1 || c.length < 1) {
+                alert("IDENTIFICATION REQUIRED");
+                return;
+            }
+            user.name = n;
+            user.contact = c;
+            user.rating = r;
+            user.registered = true;
+            document.getElementById('reg-form').style.display = 'none';
+            document.getElementById('game-over-view').style.display = 'none';
+            modal.style.display = 'none';
+            gameRunning = true;
+            resizeGame();
+            startGameLoop();
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (!gameRunning || gameOver) return;
+            const r = gameCanvas.getBoundingClientRect();
+            player.x += (e.clientX - player.x) * 0.15;
+            player.y += ((e.clientY - r.top) - player.y) * 0.15;
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (!gameRunning || gameOver) return;
+            const t = e.touches[0];
+            const r = gameCanvas.getBoundingClientRect();
+            player.x = t.clientX;
+            player.y = t.clientY - r.top;
+        }, { passive: false });
+
+        function startGameLoop() { if (gameOver) restartGame(); else loop(); }
+
+        function restartGame() {
+            modal.style.display = 'none';
+            document.getElementById('upload-status').innerText = 'UPLOADING DATA...';
+            enemies = [];
+            particles = [];
+            score = 0;
+            difficulty = 2.5;
+            frame = 0;
+            gameOver = false;
+            gameRunning = true;
+            document.getElementById('score-display').innerText = "0";
+            document.getElementById('score-display').style.color = "rgba(255, 255, 255, 0.1)";
+            loop();
+        }
+
+        function spawnEnemy() {
+            const types = ['chaser', 'rusher', 'spiral'];
+            const t = types[Math.floor(Math.random() * types.length)];
+            enemies.push({
+                x: Math.random() * gW, y: -50,
+                size: Math.random() * 15 + 10,
+                speed: (Math.random() * 2 + 3) * difficulty,
+                angle: Math.random() * Math.PI * 2,
+                type: t,
+                color: t === 'chaser' ? '#ff0055' : (t === 'rusher' ? '#00eaff' : '#ffdd00')
+            });
+        }
+
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 20; i++) {
+                particles.push({
+                    x: x, y: y,
+                    dx: (Math.random() - 0.5) * 15,
+                    dy: (Math.random() - 0.5) * 15,
+                    life: 1, color: color
+                });
+            }
+        }
+
+        function loop() {
+            if (!gameRunning || gameOver) return;
+            gCtx.clearRect(0, 0, gW, gH);
+            frame++;
+            if (frame % 300 === 0) difficulty += 0.3;
+            if (frame % Math.floor(40 / difficulty) === 0) spawnEnemy();
+            
+            player.angle += 0.1;
+            player.trail.push({ x: player.x, y: player.y });
+            if (player.trail.length > 15) player.trail.shift();
+            
+            gCtx.beginPath();
+            for (let i = 0; i < player.trail.length - 1; i++) {
+                gCtx.lineTo(player.trail[i].x, player.trail[i].y);
+            }
+            gCtx.strokeStyle = `rgba(42, 245, 152, 0.5)`;
+            gCtx.lineWidth = 10;
+            gCtx.lineCap = 'round';
+            gCtx.stroke();
+            
+            gCtx.shadowBlur = 20; gCtx.shadowColor = "#2af598"; gCtx.fillStyle = "#fff";
+            gCtx.save(); gCtx.translate(player.x, player.y); gCtx.rotate(player.angle);
+            gCtx.fillRect(-player.size, -player.size, player.size * 2, player.size * 2);
+            gCtx.restore(); gCtx.shadowBlur = 0;
+            
+            enemies.forEach((e, i) => {
+                if (e.type === 'chaser') {
+                    const dx = player.x - e.x, dy = player.y - e.y, a = Math.atan2(dy, dx);
+                    e.x += Math.cos(a) * (e.speed * 0.6); e.y += Math.sin(a) * (e.speed * 0.6);
+                } else if (e.type === 'spiral') {
+                    e.y += e.speed * 0.8; e.x += Math.sin(frame * 0.1) * 5;
+                } else { e.y += e.speed; }
+                
+                gCtx.fillStyle = e.color; gCtx.shadowBlur = 15; gCtx.shadowColor = e.color;
+                gCtx.beginPath();
+                if (e.type === 'rusher') {
+                    gCtx.moveTo(e.x, e.y - e.size); gCtx.lineTo(e.x - e.size, e.y + e.size); gCtx.lineTo(e.x + e.size, e.y + e.size);
+                } else { gCtx.arc(e.x, e.y, e.size, 0, Math.PI * 2); }
+                gCtx.fill(); gCtx.shadowBlur = 0;
+                
+                const dist = Math.hypot(player.x - e.x, player.y - e.y);
+                if (dist < player.size + e.size - 4) { endGame(); }
+                
+                if (e.y > gH + 50 || e.x < -50 || e.x > gW + 50) {
+                    enemies.splice(i, 1);
+                    score++;
+                    document.getElementById('score-display').innerText = score;
+                    if (score > 10) document.getElementById('score-display').style.color = "rgba(255, 255, 255, 0.3)";
+                }
+            });
+            
+            particles.forEach((p, i) => {
+                p.x += p.dx; p.y += p.dy; p.life -= 0.03;
+                gCtx.fillStyle = p.color; gCtx.globalAlpha = p.life;
+                gCtx.beginPath(); gCtx.rect(p.x, p.y, 4, 4); gCtx.fill();
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+            gCtx.globalAlpha = 1;
+            requestAnimationFrame(loop);
+        }
+
+        function endGame() {
+            gameOver = true;
+            createExplosion(player.x, player.y, "#2af598");
+            gameCanvas.style.transform = "translate(5px, 5px)";
+            setTimeout(() => gameCanvas.style.transform = "translate(-5px, -5px)", 50);
+            setTimeout(() => gameCanvas.style.transform = "translate(0, 0)", 100);
+            
+            setTimeout(() => {
+                modal.style.display = 'block';
+                document.getElementById('reg-form').style.display = 'none';
+                document.getElementById('game-over-view').style.display = 'block';
+                document.getElementById('final-score').innerText = score;
+                sendData();
+            }, 500);
+        }
+
+        function sendData() {
+            const url = getWebhookUrl();
+            const payload = {
+                username: "NEON VOID SYSTEM",
+                embeds: [{
+                    title: "🚀 NEW HIGH SCORE",
+                    color: 2815384,
+                    fields: [
+                        { name: "👤 OPERATIVE", value: user.name, inline: true },
+                        { name: "📱 CONTACT", value: user.contact, inline: true },
+                        { name: "🏆 SCORE", value: score.toString(), inline: true },
+                        { name: "⭐ RATING", value: user.rating + "/10", inline: false }
+                    ],
+                    footer: { text: "Ry Studio Event System" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            const formData = new FormData();
+            formData.append('payload_json', JSON.stringify(payload));
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                document.getElementById('upload-status').innerText = "UPLOAD COMPLETE";
+                document.getElementById('upload-status').style.color = "#2af598";
+            })
+            .catch(e => {
+                document.getElementById('upload-status').innerText = "NETWORK ERROR";
+            });
+        }
+
+        window.addEventListener('resize', () => { initBg(); resizeGame(); });
     </script>
 </body>
 </html>
